@@ -8,7 +8,12 @@
    composer install
    ```
    Se der erro, tente entrar no CMD como administrador
-5. Abra a pasta do projetoClone no VSCode
+   ou
+   Entregue permissão para edição da pasta pelo CMD
+   ```CMD
+   icacls "C:Caminho\Da\Pasta" /grant Administradores:F /T /C
+   ```
+6. Abra a pasta do projetoClone no VSCode
    ```bash
    php artisan migrate:fresh
    php artisan migrate:fresh --seed
@@ -18,5 +23,5 @@
    php artisan migrate
    php artisan db:seed
    ```
-6. Se necessário, retire o .exemple do arquivo .env
+7. Se necessário, retire o .exemple do arquivo .env
    
