@@ -13,7 +13,7 @@
    ```CMD
    icacls "C:Caminho\Da\Pasta" /grant Administradores:F /T /C
    ```
-6. Abra a pasta do projetoClone no VSCode
+6. Abra a pasta do projetoClone no VSCode para rodas as migrations e seeders
    ```bash
    php artisan migrate:fresh
    php artisan migrate:fresh --seed
@@ -23,5 +23,9 @@
    php artisan migrate
    php artisan db:seed
    ```
-7. Se necessário, retire o .exemple do arquivo .env
+7. Crie a chave de criptografia da aplicação
+   ```bash
+   php artisan key:generate
+   ```
+9. Se necessário, retire o .exemple do arquivo .env
    
