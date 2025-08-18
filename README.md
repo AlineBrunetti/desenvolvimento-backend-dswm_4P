@@ -18,7 +18,7 @@
    php artisan migrate:fresh
    php artisan migrate:fresh --seed
    ```
-   OU
+   ou
    ```bash
    php artisan migrate
    php artisan db:seed
