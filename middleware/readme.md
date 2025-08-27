@@ -53,3 +53,7 @@
      - abrir o projeto
      - baixar o breeze
      - estilizar o login
+       
+7. OBS
+     - npm run dev → sobe o Vite em modo desenvolvimento (fica assistindo alterações em tempo real). Você precisa deixar esse comando aberto em uma aba do terminal enquanto usa php artisan serve.
+     - npm run build → gera os arquivos otimizados em public/build/ (inclusive o manifest.json) e depois você pode fechar o Vite, só rodar php artisan serve.
