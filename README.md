@@ -6,6 +6,8 @@
 4. Com a pasta do projetoClone aberta no CMD rode
    ```CMD
    composer install
+   npm install
+   npm run dev
    ```
    Se der erro, tente entrar no CMD como administrador
    ou
