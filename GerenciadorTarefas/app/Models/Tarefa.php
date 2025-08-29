@@ -9,5 +9,5 @@ class Tarefa extends Model
 {
 use HasFactory;
 
-protected $fillable = ['titulo'];
+protected $fillable = ['titulo', 'descricao', 'concluida'];
 }

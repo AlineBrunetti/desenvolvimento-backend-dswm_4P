@@ -13,10 +13,19 @@
     <li class="list-group-item d-flex justify-content-between align-items-center">
         {{ $tarefa->titulo }}
         <div>
-            <a href="{{ route('tarefas.show', $tarefa->id) }}" class="btn btn-sm btn-info">Ver</a>
-
             <a href="{{ route('tarefas.edit', $tarefa->id) }}" class="btn btn-sm btn-
             warning">Editar</a>
+
+            <a href="{{ route('tarefas.show', $tarefa->id) }}" class="btn btn-sm btn-info">Ver</a>
+
+            @if(!$tarefa->concluida)
+            <form action="{{ route('tarefas.update', $tarefa->id) }}" method="POST" style="display:inline;">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="concluida" value="1">
+                <button type="submit" class="btn btn-sm btn-success">Concluir</button>
+            </form>
+            @endif
 
             <form action="{{ route('tarefas.destroy', $tarefa->id) }}" method="POST"
             style="display:inline;">

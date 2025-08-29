@@ -37,7 +37,6 @@ class TarefaController extends Controller
 
     public function update(Request $request, Tarefa $tarefa)
     {
-        $request->validate(['titulo' => 'required']);
         $tarefa->update($request->all());
         return redirect()->route('tarefas.index')->with('success', 'Tarefa atualizada!');
     }
