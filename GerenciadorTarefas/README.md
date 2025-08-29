@@ -1,61 +1,222 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Passo 1: Criar um Novo Projeto Laravel
+Abra o terminal e execute:
+composer create-project --prefer-dist laravel/laravel GerenciadorTarefas
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Acesse o diretório do projeto:
+cd GerenciadorTarefas
 
-## About Laravel
+Inicie o servidor:
+php artisan serve
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Passo 2: Criar a Model e Migration
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Crie a model Tarefa e sua migration correspondente:
+php artisan make:model Tarefa -m
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Isso criará:
+• app/Models/Tarefa.php (Model)
+• database/migrations/xxxx_xx_xx_xxxxxx_create_tarefas_table.php (Migration)
+Edite a migration para definir os campos da tabela:
+public function up()
+{
+Schema::create('tarefas', function (Blueprint $table) {
+$table->id(); // Cria um campo ID autoincrementável
+$table->string('titulo'); // Define um campo de texto para o título
+$table->text('descricao')->nullable(); // Define um campo de texto que pode ser nulo
+$table->timestamps(); // Cria os campos created_at e updated_at automaticamente
+});
+}
 
-## Learning Laravel
+Execute a migration para criar a tabela no banco:
+php artisan migrate
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Passo 3: Criar o Controller
+Crie um controller para gerenciar as tarefas:
+php artisan make:controller TarefaController –resource
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Isso cria o arquivo app/Http/Controllers/TarefaController.php.
+Agora, implemente os métodos do CRUD no controller:
+namespace App\Http\Controllers;
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+use App\Models\Tarefa;
+use Illuminate\Http\Request;
 
-## Laravel Sponsors
+class TarefaController extends Controller
+{
+public function index()
+{
+$tarefas = Tarefa::all();
+return view('tarefas.index', compact('tarefas'));
+}
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+public function create()
+{
+return view('tarefas.create');
+}
 
-### Premium Partners
+public function store(Request $request)
+{
+$request->validate(['titulo' => 'required']);
+Tarefa::create($request->all());
+return redirect()->route('tarefas.index')->with('success', 'Tarefa criada com sucesso!');
+}
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+public function show(Tarefa $tarefa)
+{
+return view('tarefas.show', compact('tarefa'));
+}
 
-## Contributing
+public function edit(Tarefa $tarefa)
+{
+return view('tarefas.edit', compact('tarefa'));
+}
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+public function update(Request $request, Tarefa $tarefa)
+{
+$request->validate(['titulo' => 'required']);
+$tarefa->update($request->all());
+return redirect()->route('tarefas.index')->with('success', 'Tarefa atualizada!');
+}
 
-## Code of Conduct
+public function destroy(Tarefa $tarefa)
+{
+$tarefa->delete();
+return redirect()->route('tarefas.index')->with('success', 'Tarefa excluída!');
+}
+} }
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Passo 4: Criar as Rotas
+Abra o arquivo routes/web.php e adicione:
+use App\Http\Controllers\TarefaController;
 
-## Security Vulnerabilities
+Route::resource('tarefas', TarefaController::class);
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Isso criará automaticamente as rotas para todas as operações do CRUD.
 
-## License
+Passo 5: Criar as Views
+Criar o arquivo:
+resources/views/layout.blade.php
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>@yield('title', 'Minha Aplicação')</title>
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+@yield('content')
+</div>
+</body>
+</html>
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Crie o diretório resources/views/tarefas e adicione os seguintes arquivos:
+resources/views/tarefas/index.blade.php
+@extends('layout')
+
+@section('title', 'Lista de Tarefas')
+
+@section('content')
+<h1>Lista de Tarefas</h1>
+
+<a href="{{ route('tarefas.create') }}" class="btn btn-primary mb-3">Criar Nova Tarefa</a>
+
+<ul class="list-group">
+
+@foreach($tarefas as $tarefa)
+<li class="list-group-item d-flex justify-content-between align-items-center">
+{{ $tarefa->titulo }}
+<div>
+<a href="{{ route('tarefas.show', $tarefa->id) }}" class="btn btn-sm btn-info">Ver</a>
+
+<a href="{{ route('tarefas.edit', $tarefa->id) }}" class="btn btn-sm btn-
+warning">Editar</a>
+
+<form action="{{ route('tarefas.destroy', $tarefa->id) }}" method="POST"
+style="display:inline;">
+@csrf
+@method('DELETE')
+<button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+</form>
+</div>
+</li>
+@endforeach
+</ul>
+@endsection
+
+resources/views/tarefas/create.blade.php
+@extends('layout')
+
+@section('title', 'Criar Tarefa')
+
+@section('content')
+<h1>Criar Nova Tarefa</h1>
+
+<form action="{{ route('tarefas.store') }}" method="POST">
+@csrf
+<div class="mb-3">
+<label for="titulo" class="form-label">Título:</label>
+<input type="text" name="titulo" id="titulo" class="form-control" required>
+
+</div>
+<button type="submit" class="btn btn-success">Salvar</button>
+<a href="{{ route('tarefas.index') }}" class="btn btn-secondary">Voltar</a>
+</form>
+@endsection
+
+resources/views/tarefas/edit.blade.php
+
+@extends('layout')
+
+@section('title', 'Editar Tarefa')
+
+@section('content')
+<h1>Editar Tarefa</h1>
+
+<form action="{{ route('tarefas.update', $tarefa->id) }}" method="POST">
+@csrf
+@method('PUT')
+<div class="mb-3">
+<label for="titulo" class="form-label">Título:</label>
+<input type="text" name="titulo" id="titulo" class="form-control" value="{{ $tarefa-
+>titulo }}" required>
+</div>
+<button type="submit" class="btn btn-primary">Atualizar</button>
+<a href="{{ route('tarefas.index') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+@endsection
+
+resources/views/tarefas/show.blade.php
+@extends('layout')
+
+@section('title', 'Detalhes da Tarefa')
+
+@section('content')
+<h1>Detalhes da Tarefa</h1>
+
+<p><strong>ID:</strong> {{ $tarefa->id }}</p>
+<p><strong>Título:</strong> {{ $tarefa->titulo }}</p>
+
+<a href="{{ route('tarefas.index') }}" class="btn btn-secondary">Voltar</a>
+@endsection
+
+app/Models/Tarefa.php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Tarefa extends Model
+{
+use HasFactory;
+
+protected $fillable = ['titulo'];
+}
+
+Conclusão
+Criamos um CRUD completo usando o Laravel.
+Utilizamos MVC, migrations, e o ORM Eloquent.
+Implementamos as rotas automáticas com Route::resource().
+Criamos views dinâmicas utilizando Blade Templates.
+Laravel facilita o desenvolvimento de sistemas robustos e escaláveis!
