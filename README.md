@@ -6,12 +6,14 @@
 4. Com a pasta do projetoClone aberta no CMD rode
    ```CMD
    composer install
+   npm install
+   npm run dev
    ```
    Se der erro, tente entrar no CMD como administrador
    ou
    Entregue permissão para edição da pasta pelo CMD
    ```CMD
-   icacls "C:Caminho\Da\Pasta" /grant Administradores:F /T /C
+   icacls "C:\Caminho\da\Pasta" /grant Todos:(OI)(CI)F /T /C
    ```
 6. Abra a pasta do projetoClone no VSCode para rodas as migrations e seeders
    ```bash
