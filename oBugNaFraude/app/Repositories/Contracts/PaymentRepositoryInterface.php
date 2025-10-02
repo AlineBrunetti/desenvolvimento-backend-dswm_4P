@@ -2,13 +2,10 @@
 
 namespace App\Repositories\Contracts;
 
+use App\Models\Payment; // [cite: 44]
+
+// Esta é a interface (o contrato). [cite: 45]
 interface PaymentRepositoryInterface
 {
-    /**
-     * Cria e salva um novo registro de pagamento no banco de dados.
-     *
-     * @param array $data
-     * @return \App\Models\Payment
-     */
-    public function create(array $data);
+    public function create(array $data): Payment; // [cite: 49]
 }

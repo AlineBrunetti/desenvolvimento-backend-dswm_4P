@@ -17,16 +17,6 @@ class Payment extends Model
     protected $fillable = [
         'amount',
         'card_number',
-        'card_holder',
         'status',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'card_number',
     ];
 }

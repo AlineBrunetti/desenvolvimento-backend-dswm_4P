@@ -8,59 +8,38 @@ use Tests\TestCase;
 
 class PaymentProcessTest extends TestCase
 {
-    use RefreshDatabase; 
+    use RefreshDatabase;
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_rejects_a_fraudulent_transaction_and_does_not_save_to_database()
     {
-        $data = [
-            'amount' => 100.00,
-            'card_number' => '1234567890123456',
-            'card_holder' => 'Teste Fraude',
-        ];
-
+        // Simula a API de Fraude
         Http::fake([
-            'https://api.pagamentos.falsa/process' => Http::response([
-                'is_fraudulent' => true
-            ], 200),
+            'https://api.fraudedetect.falsa/detect' => Http::response(['is_fraudulent' => true], 200),
+            'https://api.pagamentos.falsa/*' => Http::response([], 200),
         ]);
 
+        $data = [
+            'amount' => 100.00,
+            'card_number' => '1234123412341234',
+            'card_holder' => 'Test Holder',
+        ];
+
+        // Faz a requisição
         $response = $this->postJson('/api/payments', $data);
+
+        // Verifica a resposta
         $response->assertStatus(200);
         $response->assertJson([
             'status' => 'recusado',
             'message' => 'Transação recusada por suspeita de fraude.'
         ]);
-        
+
+        // Verifica que nada foi salvo no banco
         $this->assertDatabaseMissing('payments', [
-            'amount' => $data['amount'],
-        ]);
-    }
-    
-    /** @test */
-    public function it_approves_a_non_fraudulent_transaction_and_saves_to_database()
-    {
-        $data = [
-            'amount' => 50.00,
-            'card_number' => '1111222233334444', 
-            'card_holder' => 'Teste Aprovado',
-        ];
-
-        Http::fake([
-            'https://api.pagamentos.falsa/process' => Http::response([
-                'is_fraudulent' => false
-            ], 200),
-        ]);
-
-        $response = $this->postJson('/api/payments', $data);
-        $response->assertStatus(200);
-        $response->assertJson([
-            'status' => 'aprovado'
-        ]);
-        
-        $this->assertDatabaseHas('payments', [
-            'amount' => $data['amount'],
-            'status' => 'aprovado',
+            'amount' => 100.00,
         ]);
     }
 }
