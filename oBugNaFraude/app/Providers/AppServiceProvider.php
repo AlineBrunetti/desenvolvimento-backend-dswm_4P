@@ -1,24 +1,29 @@
 <?php
 
 namespace App\Providers;
-
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
+use App\Repositories\Contracts\PaymentRepositoryInterface;
+use App\Repositories\Eloquent\EloquentPaymentRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Registra qualquer serviço da aplicação.
      */
     public function register(): void
     {
-        //
+        $this->app->bind(
+            PaymentRepositoryInterface::class,
+            EloquentPaymentRepository::class
+        );
     }
 
     /**
-     * Bootstrap any application services.
+     * Inicia qualquer serviço da aplicação.
      */
     public function boot(): void
     {
-        //
+        Schema::defaultStringLength(191); 
     }
 }
