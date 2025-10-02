@@ -3,27 +3,23 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\ServiceProvider; // [cite: 192]
-use App\Repositories\Contracts\PaymentRepositoryInterface; // [cite: 193]
-use App\Repositories\Eloquent\EloquentPaymentRepository; // [cite: 194]
+use Illuminate\Support\ServiceProvider; 
+use App\Repositories\Contracts\PaymentRepositoryInterface; 
+use App\Repositories\Eloquent\EloquentPaymentRepository; 
 
-class AppServiceProvider extends ServiceProvider // [cite: 195]
+class AppServiceProvider extends ServiceProvider 
 {
-    /**
-     * Registra qualquer serviço da aplicação. [cite: 198]
-     */
-    public function register() // [cite: 202]
+    
+    public function register() 
     {
-        // Registrando a dependência. [cite: 204]
+        
         $this->app->bind(
-            PaymentRepositoryInterface::class, // [cite: 208]
-            EloquentPaymentRepository::class // [cite: 209]
+            PaymentRepositoryInterface::class, 
+            EloquentPaymentRepository::class 
         );
     }
 
-    /**
-     * Inicia qualquer serviço da aplicação.
-     */
+    
     public function boot(): void
     {
         Schema::defaultStringLength(191); 

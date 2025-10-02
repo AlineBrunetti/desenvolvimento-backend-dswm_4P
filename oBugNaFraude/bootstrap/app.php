@@ -11,7 +11,7 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    // ADICIONE ESTA LINHA ABAIXO
+    
     ->withProviders([
         \App\Providers\RouteServiceProvider::class,
     ])
