@@ -11,7 +11,7 @@ class CsvReport implements ReportInterface
     public function generate(array $data): string
     {
         // Lógica real: formatar dados para CSV
-        $output = ";ID,Nome\n";
+        $output = "ID,Nome\n";
         foreach ($data as $item) {
             $output .="{$item['id']},{$item['name']}\n";
         }
