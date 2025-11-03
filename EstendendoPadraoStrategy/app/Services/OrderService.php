@@ -7,7 +7,6 @@ use App\Discount\DiscountContext;
 use App\Discount\Strategies\FixedDiscount;
 use App\Discount\Strategies\PercentageDiscount;
 use App\Discount\Strategies\VipDiscount;
-// Adicione a nova estratégia
 use App\Discount\Strategies\SeasonalDiscount;
 use App\Discount\DiscountStrategy;
 use InvalidArgumentException;
@@ -37,7 +36,7 @@ class OrderService
     }
 
     /**
-     * Mapeia o tipo de string para a Strategy concreta (poderia ser uma Factory)
+     * Mapeia o tipo de string para a Strategy concreta
      * @throws \InvalidArgumentException
      */
     private function getStrategyInstance(string $type): DiscountStrategy
@@ -46,7 +45,6 @@ class OrderService
             'fixed'      => new FixedDiscount(),
             'percentage' => new PercentageDiscount(),
             'vip'        => new VipDiscount(),
-            // Adicione o novo 'case' para o desconto sazonal
             'seasonal'   => new SeasonalDiscount(),
             default      => throw new InvalidArgumentException("Tipo de desconto inválido."),
         };

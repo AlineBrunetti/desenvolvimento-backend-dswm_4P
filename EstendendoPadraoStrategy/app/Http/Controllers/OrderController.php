@@ -20,7 +20,6 @@ class OrderController extends Controller
     {
         $request->validate([
             'amount' => 'required|numeric|min:0.01',
-            // Adicione 'seasonal' à lista de tipos permitidos
             'type'   => 'required|in:fixed,percentage,vip,seasonal',
         ]);
 
