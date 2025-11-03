@@ -8,5 +8,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Rota de exemplo: POST /api/calculate-discount
+// Rota de exemplo: POST /calculate-discount
 Route::post('/calculate-discount', [OrderController::class, 'calculate']);
